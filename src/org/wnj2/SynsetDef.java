@@ -26,6 +26,9 @@ public class SynsetDef {
 	private final String def;
 	private final int sid;
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Constractor
+	/////////////////////////////////////////////////////////////////////////////////////
 	SynsetDef(final Wnj2 parent, final Synset synset, final Lang lang, final String def, final int sid){
 
 		this.parent = parent;
@@ -36,6 +39,9 @@ public class SynsetDef {
 
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Public methods
+	/////////////////////////////////////////////////////////////////////////////////////
 	public Synset getSynset() {
 		return this.synset;
 	}
@@ -52,6 +58,9 @@ public class SynsetDef {
 		return this.sid;
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 
@@ -65,6 +74,9 @@ public class SynsetDef {
 		return super.equals(obj);
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 
@@ -72,10 +84,14 @@ public class SynsetDef {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
+
+		return String.format("SynsetDef[ synsetid: %s, lang: %s, def: %s, sid: %d]", this.getSynset(), this.getLang(), this.getDef(), this.getSID());
+
 	}
 
 }

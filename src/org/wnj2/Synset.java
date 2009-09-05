@@ -26,6 +26,9 @@ public abstract class Synset {
 	protected final Wnj2 parent;
 	private final String synsetid;
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Constractor
+	/////////////////////////////////////////////////////////////////////////////////////
 	protected Synset(final Wnj2 parent, final String id){
 
 		this.parent = parent;
@@ -33,6 +36,9 @@ public abstract class Synset {
 
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Public methods
+	/////////////////////////////////////////////////////////////////////////////////////
 	public String getSynsetID() {
 
 		return this.synsetid;
@@ -73,6 +79,9 @@ public abstract class Synset {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 
@@ -89,6 +98,9 @@ public abstract class Synset {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 
@@ -96,10 +108,14 @@ public abstract class Synset {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
+
+		return String.format("Synset[ synsetid: %s, pos: %s, name: %s, src: %s]", this.getSynsetID(), this.getPos(), this.getName(), this.getSrc());
+
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////

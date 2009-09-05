@@ -30,6 +30,9 @@ public class Sense {
 	private final int freq;
 	private final String src;
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Constractor
+	/////////////////////////////////////////////////////////////////////////////////////
 	Sense(final Wnj2 parent, final String synset, final int word, final String lang, final int rank, final int lex, final int freq, final String src){
 
 		this.parent = parent;
@@ -43,6 +46,9 @@ public class Sense {
 
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Public methods
+	/////////////////////////////////////////////////////////////////////////////////////
 	public Synset getSynset() {
 		return this.synset;
 	}
@@ -71,6 +77,9 @@ public class Sense {
 		return this.src;
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(final Object obj){
 
@@ -85,6 +94,9 @@ public class Sense {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode(){
 
@@ -92,10 +104,15 @@ public class Sense {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
+
+		return String.format("Sense[ synsetid: %s, wordid: %d, lang: %s, rank %d, lexid: %d, freq: %d, src: %s]",
+				this.getSynset().getSynsetID(), this.getWord().getWordID(), this.getLang(), this.getRank(), this.getLexID(), this.getFreq(), this.getSrc());
+
 	}
 
 }

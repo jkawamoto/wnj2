@@ -32,7 +32,7 @@ import java.util.List;
 
 public class Wnj2 implements Closeable{
 
-	private final Connection _connection;
+	private final Connection connection;
 
 	private static final String FIND_WORD_BY_LEMMA = "select * from WORD where lemma = ?;";
 	private static final String FIND_WORD_BY_LEMMA_AND_POS = "select * from WORD where lemma = ? and pos = ?;";
@@ -69,30 +69,59 @@ public class Wnj2 implements Closeable{
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Constractors
 	/////////////////////////////////////////////////////////////////////////////////////
-	public Wnj2() throws ClassNotFoundException, SQLException{
+	/**
+	 * SQLiteへアクセスするWnj2インスタンスを作成する．
+	 *
+	 * @throws ClassNotFoundException SQLite用JDBSドライバの読み込みに失敗した場合
+	 * @throws IOException 日本語WordNetデータベースファイルに関する入出力エラーが発生した場合
+	 */
+	public Wnj2() throws ClassNotFoundException, IOException{
 
 		Class.forName("org.sqlite.JDBC");
-		this._connection = DriverManager.getConnection("jdbc:sqlite:./data/wnjpn-0.9.db");
+		try{
+
+			this.connection = DriverManager.getConnection("jdbc:sqlite:./data/wnjpn-0.9.db");
+
+		}catch(final SQLException e){
+
+			System.err.println(e.getMessage());
+			throw new IOException("wnjpn-0.9.dbに関する入出力エラー");
+
+		}
 
 	}
 
+	/**
+	 * データベースへのコネクションを指定してWnj2インスタンスを作成する．
+	 *
+	 * @param connection 日本語WordNetデータベースへ接続済みのコネクション
+	 */
 	public Wnj2(final Connection connection){
 
-		this._connection = connection;
+		if(connection == null){
+
+			throw new NullPointerException("connection is null");
+
+		}
+
+		this.connection = connection;
 
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/* (非 Javadoc)
+	 * @see java.io.Closeable#close()
+	 */
 	@Override
 	public void close() throws IOException {
 
 		try {
 
-			this._connection.close();
+			this.connection.close();
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 
 			throw new IOException(e.getMessage());
 
@@ -504,9 +533,9 @@ public class Wnj2 implements Closeable{
 
 		try {
 
-			return this._connection.prepareStatement(sql);
+			return this.connection.prepareStatement(sql);
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}

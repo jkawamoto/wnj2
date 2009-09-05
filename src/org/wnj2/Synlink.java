@@ -27,6 +27,9 @@ public class Synlink {
 	private final Link link;
 	private final String src;
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Constractor
+	/////////////////////////////////////////////////////////////////////////////////////
 	Synlink(final Wnj2 parent, final String from, final String to, final Link link, final String src){
 
 		this.parent = parent;
@@ -37,6 +40,9 @@ public class Synlink {
 
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	// Public methods
+	/////////////////////////////////////////////////////////////////////////////////////
 	public Synset getFrom() {
 		return this.from;
 	}
@@ -53,6 +59,9 @@ public class Synlink {
 		return this.src;
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(final Object obj) {
 
@@ -64,18 +73,27 @@ public class Synlink {
 		}
 
 		return super.equals(obj);
+
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.hashCode();
+
+		return this.getLink().hashCode() * this.getFrom().hashCode() * this.getTo().hashCode();
+
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
+
+		return String.format("Synlink[ from: %s, to: %s, link: %s, src: %s]", this.getFrom().getSynsetID(), this.getTo().getSynsetID(), this.getLink(), this.getSrc());
+
 	}
 
 }

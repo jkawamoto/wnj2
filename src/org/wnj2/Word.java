@@ -39,12 +39,22 @@ public abstract class Word {
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * WordIDを取得する．
+	 *
+	 * @return このWordを表すID
+	 */
 	public int getWordID(){
 
 		return this.wordid;
 
 	}
 
+	/**
+	 * 言語を取得する．
+	 *
+	 * @return このWordの言語
+	 */
 	public abstract Lang getLang();
 	public abstract String getLemma();
 	public abstract String getPron();
@@ -62,8 +72,9 @@ public abstract class Word {
 
 	}
 
-
-
+	/* (非 Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(final Object obj){
 
@@ -80,6 +91,9 @@ public abstract class Word {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 
@@ -87,10 +101,14 @@ public abstract class Word {
 
 	}
 
+	/* (非 Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.toString();
+
+		return String.format("Word[ wordid: %d, lang: %s, lemma: %s, pron: %s, pos: %s]", this.getWordID(), this.getLang(), this.getLemma(), this.getPron(), this.getPos());
+
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
