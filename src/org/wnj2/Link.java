@@ -18,6 +18,9 @@
 
 package org.wnj2;
 
+/**
+ * リンクの種類
+ */
 public enum Link {
 
 	/** See also */

@@ -20,7 +20,6 @@ package org.wnj2;
 
 import java.util.List;
 
-
 public abstract class Word {
 
 	protected final Wnj2 parent;
@@ -40,7 +39,7 @@ public abstract class Word {
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * WordIDを取得する．
+	 * IDを取得する．
 	 *
 	 * @return このWordを表すID
 	 */
@@ -56,16 +55,39 @@ public abstract class Word {
 	 * @return このWordの言語
 	 */
 	public abstract Lang getLang();
+
+	/**
+	 * 見出し語を取得する．
+	 *
+	 * @return このWordの見出し語
+	 */
 	public abstract String getLemma();
+
 	public abstract String getPron();
+
+	/**
+	 * 品詞を取得する．
+	 *
+	 * @return このWordの品詞
+	 */
 	public abstract Pos getPos();
 
+	/**
+	 * Sense集合を取得する．
+	 *
+	 * @return このWordに関係するSenseのリスト
+	 */
 	public List<Sense> getSenses(){
 
 		return this.parent.findSenses(this);
 
 	}
 
+	/**
+	 * Synset集合を取得する．
+	 *
+	 * @return このWordに関係するSynsetのリスト
+	 */
 	public List<Synset> getSynsets(){
 
 		return this.parent.findSynsets(this.getLemma(), this.getPos());
@@ -120,7 +142,7 @@ public abstract class Word {
 
 	}
 
-	static Word create(final Wnj2 parent, final int id, final Lang lang, final String lemma, final String pron, final String pos){
+	static Word create(final Wnj2 parent, final int id, final Lang lang, final String lemma, final String pron, final Pos pos){
 
 		return new InitializedWord(parent, id, lang, lemma, pron, pos);
 

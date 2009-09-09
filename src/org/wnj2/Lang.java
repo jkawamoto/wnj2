@@ -18,12 +18,15 @@
 
 package org.wnj2;
 
+/**
+ * 言語
+ */
 public enum Lang {
 
-	/** English */
+	/** 英語(English) */
 	eng,
 
-	/** Japanese */
+	/** 日本語(Japanese) */
 	jpn
 
 }

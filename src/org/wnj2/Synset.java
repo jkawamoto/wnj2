@@ -79,6 +79,12 @@ public abstract class Synset {
 
 	}
 
+	public List<Synset> getConnectedSynsets(final Link link){
+
+		return this.parent.findSynsets(this, link);
+
+	}
+
 	/* (非 Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */

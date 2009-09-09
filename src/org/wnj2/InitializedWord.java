@@ -28,13 +28,13 @@ class InitializedWord extends Word{
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Constractor
 	/////////////////////////////////////////////////////////////////////////////////////
-	InitializedWord(final Wnj2 parent, final int id, final Lang lang, final String lemma, final String pron, final String pos){
+	InitializedWord(final Wnj2 parent, final int id, final Lang lang, final String lemma, final String pron, final Pos pos){
 		super(parent, id);
 
 		this.lang = lang;
 		this.lemma = lemma;
 		this.pron = pron;
-		this.pos = Pos.valueOf(pos);
+		this.pos = pos;
 
 	}
 

@@ -19,6 +19,8 @@
 package org.wnj2;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
@@ -44,6 +46,7 @@ public class Wnj2 implements Closeable{
 
 	private static final String FIND_SYNSETS_BY_NAME_AND_POS = "select * from SYNSET where name = ? and pos = ?;";
 	private static final String FIND_SYNSET_BY_SYNSET = "select * from SYNSET where synset = ?;";
+	private static final String FIND_SYNSET_BY_SYNSET_AND_LINK = "select s.synset, s.pos, s.name, s.src from SYNLINK l inner join SYNSET s on l.synset2 = s.synset where l.synset1 = ?;";
 
 	private static final String FIND_SYNSETDEF_BY_SYNSET = "select * from SYNSET_DEF where synset = ?";
 
@@ -60,6 +63,7 @@ public class Wnj2 implements Closeable{
 
 	private Reference<PreparedStatement> findSynsetsByNameAndPos = new SoftReference<PreparedStatement>(null);
 	private Reference<PreparedStatement> findSynsetBySynset = new SoftReference<PreparedStatement>(null);
+	private Reference<PreparedStatement> findSynsetBySynsetAndLink = new SoftReference<PreparedStatement>(null);
 
 	private Reference<PreparedStatement> findSynsetDefBySynset = new SoftReference<PreparedStatement>(null);
 
@@ -70,17 +74,26 @@ public class Wnj2 implements Closeable{
 	// Constractors
 	/////////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * SQLiteへアクセスするWnj2インスタンスを作成する．
+	 * 指定したSQLiteデータベースファイルへアクセスするWnj2インスタンスを作成する．
+	 *
+	 * @param file 日本語WordNetデータベースファイル
 	 *
 	 * @throws ClassNotFoundException SQLite用JDBSドライバの読み込みに失敗した場合
 	 * @throws IOException 日本語WordNetデータベースファイルに関する入出力エラーが発生した場合
 	 */
-	public Wnj2() throws ClassNotFoundException, IOException{
+	public Wnj2(final File file) throws ClassNotFoundException, IOException{
+
+		if(!file.exists()){
+
+			throw new FileNotFoundException(file.toString());
+
+		}
+
 
 		Class.forName("org.sqlite.JDBC");
 		try{
 
-			this.connection = DriverManager.getConnection("jdbc:sqlite:./data/wnjpn-0.9.db");
+			this.connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.getAbsolutePath()));
 
 		}catch(final SQLException e){
 
@@ -111,17 +124,19 @@ public class Wnj2 implements Closeable{
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
-	/* (非 Javadoc)
-	 * @see java.io.Closeable#close()
+	/**
+	 * データベースへの接続を切る．
+	 *
+	 * コネクションを指定してこのオブジェクトを作成した場合，そのコネクションも閉じます．
 	 */
 	@Override
 	public void close() throws IOException {
 
-		try {
+		try{
 
 			this.connection.close();
 
-		} catch (final SQLException e) {
+		}catch(final SQLException e){
 
 			throw new IOException(e.getMessage());
 
@@ -129,6 +144,12 @@ public class Wnj2 implements Closeable{
 
 	}
 
+	/**
+	 * 見出し語に一致するWord集合を取得する．
+	 *
+	 * @param lemma 見出し語
+	 * @return 見出し語lemmaに一致するWordのリスト
+	 */
 	public List<Word> findWords(final String lemma){
 
 		PreparedStatement ps = this.findWordsByLemma.get();
@@ -145,14 +166,23 @@ public class Wnj2 implements Closeable{
 			ps.setString(1, lemma.toLowerCase());
 			ret.addAll(this.createWords(ps));
 
-		} catch ( SQLException e ) {
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		return ret;
 
 	}
 
+	/**
+	 * 見出し語と品詞を指定して一致するWord集合を取得する．
+	 *
+	 * @param lemma 見出し語
+	 * @param pos 品詞
+	 * @return 見出し語lemmaと品詞posに一致するWordのリスト
+	 */
 	public List<Word> findWords(final String lemma, final Pos pos){
 
 		PreparedStatement ps = this.findWordsByLemmaAndPos.get();
@@ -170,15 +200,24 @@ public class Wnj2 implements Closeable{
 			ps.setString(2, pos.toString());
 			ret.addAll(this.createWords(ps));
 
-		}catch(SQLException e){
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		return ret;
 
 	}
 
-	public List<Synset> findSynsets(final String name, final Pos pos){
+	/**
+	 * 見出し語と品詞を指定して一致するSynset集合を取得する．
+	 *
+	 * @param lemma 見出し語
+	 * @param pos 品詞
+	 * @return 見出し語lemmaと品詞posに一致するSynsetのリスト
+	 */
+	public List<Synset> findSynsets(final String lemma, final Pos pos){
 
 		PreparedStatement ps = this.findSynsetsByNameAndPos.get();
 		if(ps == null){
@@ -191,12 +230,14 @@ public class Wnj2 implements Closeable{
 		final List<Synset> ret = new ArrayList<Synset>();
 		try {
 
-			ps.setString(1, name);
+			ps.setString(1, lemma);
 			ps.setString(2, pos.toString());
 			ret.addAll(this.createSynsets(ps));
 
-		} catch ( SQLException e ) {
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		return ret;
@@ -218,13 +259,15 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Word> ret = new ArrayList<Word>();
-		try {
+		try{
 
 			ps.setInt(1, word.getWordID());
 			ret.addAll(this.createWords(ps));
 
-		} catch ( SQLException e ) {
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		if(ret.size() == 0){
@@ -300,7 +343,7 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Sense> ret = new ArrayList<Sense>();
-		try {
+		try{
 
 			ps.setString(1, synset.getSynsetID());
 			ps.setString(2, lang.toString());
@@ -327,13 +370,15 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synset> ret = new ArrayList<Synset>();
-		try {
+		try{
 
 			ps.setString(1, synset.getSynsetID());
 			ret.addAll(this.createSynsets(ps));
 
-		} catch ( SQLException e ) {
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		if(ret.size() == 0){
@@ -345,6 +390,33 @@ public class Wnj2 implements Closeable{
 		return ret.get(0);
 
 	}
+
+	List<Synset> findSynsets(final Synset synset, final Link link){
+
+		PreparedStatement ps = this.findSynsetBySynsetAndLink.get();
+		if(ps == null){
+
+			ps = this.createPreparedStatement(FIND_SYNSET_BY_SYNSET_AND_LINK);
+			this.findSynsetBySynsetAndLink = new SoftReference<PreparedStatement>(ps);
+
+		}
+
+		final List<Synset> ret = new ArrayList<Synset>();
+		try{
+
+			ps.setString(1, synset.getSynsetID());
+			ret.addAll(this.createSynsets(ps));
+
+		}catch(final SQLException e){
+
+			e.printStackTrace();
+
+		}
+
+		return ret;
+
+	}
+
 
 	SynsetDef findSynsetDef(final Synset synset){
 
@@ -447,7 +519,11 @@ public class Wnj2 implements Closeable{
 
 			while(rs.next()){
 
-				words.add(Word.create(this, rs.getInt(1), Lang.valueOf(rs.getString(2)), rs.getString(3), rs.getString(4), rs.getString(5)));
+				Object a = rs.getObject(4);
+				System.out.println(a);
+				System.out.println(a.getClass());
+
+				words.add(Word.create(this, rs.getInt(1), Lang.valueOf(rs.getString(2)), rs.getString(3), rs.getString(4), Pos.valueOf(rs.getString(5))));
 
 			}
 
@@ -527,22 +603,20 @@ public class Wnj2 implements Closeable{
 
 	}
 
-
-
 	private PreparedStatement createPreparedStatement(final String sql){
 
-		try {
+		try{
 
 			return this.connection.prepareStatement(sql);
 
-		} catch (final SQLException e) {
-			// TODO 自動生成された catch ブロック
+		}catch(final SQLException e){
+
 			e.printStackTrace();
+
 		}
 
 		return null;
 
 	}
-
 
 }

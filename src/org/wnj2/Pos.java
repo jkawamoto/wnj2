@@ -18,18 +18,21 @@
 
 package org.wnj2;
 
+/**
+ * 品詞(part of speech)
+ */
 public enum Pos {
 
-	/** adjective */
+	/** 形容詞(adjective) */
 	a,
 
-	/** adverb */
+	/** 副詞(adverb) */
 	r,
 
-	/** noun */
+	/** 名詞(noun) */
 	n,
 
-	/** verb */
+	/** 動詞(verb) */
 	v;
 
 }
