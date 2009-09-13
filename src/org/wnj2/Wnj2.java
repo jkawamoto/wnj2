@@ -32,6 +32,47 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * データベースへの接続を管理する基本オブジェクト．
+ *
+ * <p>
+ * Wnj2ライブラリを使用する場合，始めにこのオブジェクトを作成する必要があります．
+ * Wnj2インスタンスの作成方法は，日本語WordNetのデータファイルを指定する方法とデータベースへのコネクションを指定する方法の二種類があります．
+ * </p>
+ *
+ * <p>
+ * データファイルを指定して作成する場合，日本語WordNetウェブサイトで配布されているSQLite用データファイルをコンストラクタに指定します．
+ * </p>
+ * <blockquote><pre>
+ * File file = new File("path_to_data_file");
+ * Wnj2 wn = new Wnj2(file);
+ * </pre></blockquote>
+ * <p>
+ * この方法を使用する場合，SQLite用JDBCドライバが必要になります．
+ * </p>
+ *
+ * <p>
+ * データベースコネクションを指定して作成する方法は，主にSQLite以外のDBMSにデータを格納している場合に用います．
+ * 配布されているSQLite用データを他のDBMSへ移行するツールは
+ * <a href="http://sourceforge.jp/projects/wnj2/releases/">こちら</a>
+ * で配布予定です．
+ * 例えばMySQLを使用する場合は次のようになるでしょう（環境によって変わります）．
+ * </p>
+ * <blockquote><pre>
+ * Class.forName("com.mysql.jdbc.Driver");
+ * Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/wnj", "wnj", "pass2wnj");
+ *
+ * Wnj2 wn = new Wnj2(con);
+ * </pre></blockquote>
+ *
+ * <p>
+ * どちらの方法で作成した場合も，使用後はcloseメソッドを呼び出して下さい．データベースへの接続を切ります．
+ * </p>
+ *
+ *  @see Word
+ *  @see Synset
+ *
+ */
 public class Wnj2 implements Closeable{
 
 	private final Connection connection;
@@ -82,13 +123,13 @@ public class Wnj2 implements Closeable{
 	 * @throws IOException 日本語WordNetデータベースファイルに関する入出力エラーが発生した場合
 	 */
 	public Wnj2(final File file) throws ClassNotFoundException, IOException{
+		assert file != null : "file is null";
 
 		if(!file.exists()){
 
 			throw new FileNotFoundException(file.toString());
 
 		}
-
 
 		Class.forName("org.sqlite.JDBC");
 		try{
@@ -97,8 +138,7 @@ public class Wnj2 implements Closeable{
 
 		}catch(final SQLException e){
 
-			System.err.println(e.getMessage());
-			throw new IOException("wnjpn-0.9.dbに関する入出力エラー");
+			throw new IOException(String.format("%sに関する入出力エラー", file));
 
 		}
 
@@ -110,12 +150,7 @@ public class Wnj2 implements Closeable{
 	 * @param connection 日本語WordNetデータベースへ接続済みのコネクション
 	 */
 	public Wnj2(final Connection connection){
-
-		if(connection == null){
-
-			throw new NullPointerException("connection is null");
-
-		}
+		assert connection != null : "connection is null";
 
 		this.connection = connection;
 
@@ -128,6 +163,7 @@ public class Wnj2 implements Closeable{
 	 * データベースへの接続を切る．
 	 *
 	 * コネクションを指定してこのオブジェクトを作成した場合，そのコネクションも閉じます．
+	 * @throws IOException 入出力エラーが発生した場合
 	 */
 	@Override
 	public void close() throws IOException {
@@ -151,6 +187,7 @@ public class Wnj2 implements Closeable{
 	 * @return 見出し語lemmaに一致するWordのリスト
 	 */
 	public List<Word> findWords(final String lemma){
+		assert lemma != null : "lemma is null";
 
 		PreparedStatement ps = this.findWordsByLemma.get();
 		if(ps == null){
@@ -184,6 +221,8 @@ public class Wnj2 implements Closeable{
 	 * @return 見出し語lemmaと品詞posに一致するWordのリスト
 	 */
 	public List<Word> findWords(final String lemma, final Pos pos){
+		assert lemma != null : "lemma is null";
+		assert pos != null : "pos is null";
 
 		PreparedStatement ps = this.findWordsByLemmaAndPos.get();
 		if(ps == null){
@@ -218,6 +257,8 @@ public class Wnj2 implements Closeable{
 	 * @return 見出し語lemmaと品詞posに一致するSynsetのリスト
 	 */
 	public List<Synset> findSynsets(final String lemma, final Pos pos){
+		assert lemma != null : "lemma is null";
+		assert pos != null : "pos is null";
 
 		PreparedStatement ps = this.findSynsetsByNameAndPos.get();
 		if(ps == null){
@@ -605,9 +646,10 @@ public class Wnj2 implements Closeable{
 
 	private PreparedStatement createPreparedStatement(final String sql){
 
+		PreparedStatement ret = null;
 		try{
 
-			return this.connection.prepareStatement(sql);
+			ret = this.connection.prepareStatement(sql);
 
 		}catch(final SQLException e){
 
@@ -615,7 +657,8 @@ public class Wnj2 implements Closeable{
 
 		}
 
-		return null;
+		assert ret != null;
+		return ret;
 
 	}
 

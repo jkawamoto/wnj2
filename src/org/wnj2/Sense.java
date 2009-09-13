@@ -18,6 +18,30 @@
 
 package org.wnj2;
 
+/**
+ * Senseタプルのラッパオブジェクト．
+ *
+ * <p>
+ * 日本語WordNetでは，Senseテーブルは次のように定義されています．
+ * </p>
+ * <blockquote><pre>
+ * CREATE TABLE SENSE(
+ *     synset                      TEXT,
+ *     wordid                      INTEGER(2000000000,10),
+ *     lang                        TEXT,
+ *     rank                        TEXT,
+ *     lexid                       INTEGER(2000000000,10),
+ *     freq                        INTEGER(2000000000,10),
+ *     src                         TEXT,
+ *     CONSTRAINT sense_idx UNIQUE (synset, wordid)
+ * )
+ * </pre></blockquote>
+ * <p>
+ * Senseオブジェクトは，このテーブルのタプル一つ一つに対応し，各属性へのアクセッサを提供します．
+ * </p>
+ *
+ * @see Word
+ */
 public class Sense {
 
 	protected final Wnj2 parent;

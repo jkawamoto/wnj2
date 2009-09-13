@@ -18,6 +18,28 @@
 
 package org.wnj2;
 
+/**
+ * Synlinkタプルのラッパオブジェクト．
+ *
+ * <p>
+ * 日本語WordNetでは，Synlinkテーブルは次のように定義されています．
+ * </p>
+ *
+ * <blockquote><pre>
+ * CREATE TABLE SYNLINK(
+ *     synset1                     TEXT,
+ *     synset2                     TEXT,
+ *     link                        TEXT,
+ *     src                         TEXT,
+ *     CONSTRAINT synlink_idx UNIQUE (synset1, link)
+ * )
+ * </pre></blockquote>
+ * <p>
+ * Synlinkオブジェクトは，このテーブルのタプル一つ一つに対応し，各属性へのアクセッサを提供します．
+ * </p>
+ *
+ * @see Synset
+ */
 public class Synlink {
 
 	protected final Wnj2 parent;
@@ -43,10 +65,20 @@ public class Synlink {
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * リンク元を取得する．
+	 *
+	 * @return リンク元のSynset
+	 */
 	public Synset getFrom() {
 		return this.from;
 	}
 
+	/**
+	 * リンク先を取得する．
+	 *
+	 * @return リンク先のSynset
+	 */
 	public Synset getTo() {
 		return this.to;
 	}

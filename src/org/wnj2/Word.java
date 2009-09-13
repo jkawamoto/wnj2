@@ -20,6 +20,36 @@ package org.wnj2;
 
 import java.util.List;
 
+/**
+ * Wordタプルのラッパオブジェクト．
+ *
+ * <p>
+ * 日本語WordNetでは，Wordテーブルは次のように定義されています．
+ * </p>
+ * <blockquote><pre>
+ * CREATE TABLE WORD(
+ *     wordid                      INTEGER(2000000000,10),
+ *     lang                        TEXT,
+ *     lemma                       TEXT,
+ *     pron                        TEXT,
+ *     pos                         TEXT,
+ *     CONSTRAINT null PRIMARY KEY (wordid),
+ *     CONSTRAINT word_id_idx UNIQUE (wordid),
+ *     CONSTRAINT word_word_idx UNIQUE (lemma)
+ * )
+ * </pre></blockquote>
+ * <p>
+ * Wordオブジェクトは，このテーブルのタプル一つ一つに対応し，各属性へのアクセッサを提供します．
+ * </p>
+ * <p>
+ * Wordオブジェクトを取得するには，見出し語または見出し語と品詞を指定してWnj2オブジェクトのfindWordsメソッドを呼びます．
+ * また，Wordオブジェクトから関係するSenseやSynsetを取得することが出来ます．
+ * </p>
+ *
+ * @see Sense
+ * @see Synset
+ *
+ */
 public abstract class Word {
 
 	protected final Wnj2 parent;

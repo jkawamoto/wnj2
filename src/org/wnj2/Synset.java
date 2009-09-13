@@ -20,7 +20,28 @@ package org.wnj2;
 
 import java.util.List;
 
-
+/**
+ * Synsetタプルのラッパオブジェクト．
+ *
+ * <p>
+ * 日本語WordNetでは，Synsetテーブルは次のように定義されています．
+ * </p>
+ * <blockquote><pre>
+ * CREATE TABLE SYNSET(
+ *     synset                      TEXT,
+ *     pos                         TEXT,
+ *     name                        TEXT,
+ *     src                         TEXT
+ * )
+ * </pre></blockquote>
+ * <p>
+ * Synsetオブジェクトは，このテーブルのタプル一つ一つに対応し，各属性へのアクセッサを提供します．
+ * </p>
+ *
+ * @see SynsetDef
+ * @see Sense
+ * @see Synlink
+ */
 public abstract class Synset {
 
 	protected final Wnj2 parent;
@@ -62,11 +83,17 @@ public abstract class Synset {
 	}
 
 	public List<Sense> getSenses(final Lang lang){
+		assert lang != null : "lang is null";
 
 		return this.parent.findSenses(this, lang);
 
 	}
 
+	/**
+	 * このSynsetから出ているリンク集合を取得する．
+	 *
+	 * @return このSynsetから出ているリンク集合
+	 */
 	public List<Synlink> getSynlinks(){
 
 		return this.parent.findSynlinks(this);
@@ -74,12 +101,14 @@ public abstract class Synset {
 	}
 
 	public List<Synlink> getSynlinks(final Link link){
+		assert link != null : "link is null";
 
 		return this.parent.findSynlinks(this, link);
 
 	}
 
 	public List<Synset> getConnectedSynsets(final Link link){
+		assert link != null : "link is null";
 
 		return this.parent.findSynsets(this, link);
 

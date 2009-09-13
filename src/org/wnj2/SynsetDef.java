@@ -18,6 +18,25 @@
 
 package org.wnj2;
 
+/**
+ * SynsetDefタプルのラッパオブジェクト．
+ *
+ * <p>
+ * 日本語WordNetでは，SynsetDefテーブルは次のように定義されており，
+ * 個々のSynsetに対する説明文を格納しています．
+ * </p>
+ * <blockquote><pre>
+ * CREATE TABLE SYNSET_DEF(
+ *     synset                      TEXT,
+ *     lang                        TEXT,
+ *     def                         TEXT,
+ *     sid                         TEXT
+ * )
+ * </pre></blockquote>
+ *
+ * @see Synset
+ *
+ */
 public class SynsetDef {
 
 	protected final Wnj2 parent;
