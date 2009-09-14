@@ -464,10 +464,6 @@ public class Wnj2 implements Closeable{
 
 			while(rs.next()){
 
-				Object a = rs.getObject(4);
-				System.out.println(a);
-				System.out.println(a.getClass());
-
 				words.add(Word.create(this, rs.getInt(1), Lang.valueOf(rs.getString(2)), rs.getString(3), rs.getString(4), Pos.valueOf(rs.getString(5))));
 
 			}
