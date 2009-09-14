@@ -18,6 +18,8 @@
 
 package org.wnj2;
 
+import java.sql.SQLException;
+
 class LazySynset extends Synset{
 
 	private Synset impl = null;
@@ -70,10 +72,43 @@ class LazySynset extends Synset{
 
 		if(this.impl == null){
 
-			this.impl = this.parent.findSynset(this);
+			try {
+
+				this.impl = this.parent.findSynset(this);
+
+			}catch(final SQLException e){
+
+				this.impl = new DummySynset(this.parent, "");
+
+			}
 
 		}
+
 		return this.impl;
+
+	}
+
+
+	private class DummySynset extends Synset{
+
+		protected DummySynset(Wnj2 parent, String id) {
+			super(parent, id);
+		}
+
+		@Override
+		public String getName() {
+			return "";
+		}
+
+		@Override
+		public Pos getPos() {
+			return null;
+		}
+
+		@Override
+		public String getSrc() {
+			return "";
+		}
 
 	}
 

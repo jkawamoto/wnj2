@@ -18,6 +18,7 @@
 
 package org.wnj2;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -70,19 +71,19 @@ public abstract class Synset {
 	public abstract String getName();
 	public abstract String getSrc();
 
-	public SynsetDef getDef(){
+	public SynsetDef getDef() throws SQLException{
 
 		return this.parent.findSynsetDef(this);
 
 	}
 
-	public List<Sense> getSenses(){
+	public List<Sense> getSenses() throws SQLException{
 
 		return this.parent.findSenses(this);
 
 	}
 
-	public List<Sense> getSenses(final Lang lang){
+	public List<Sense> getSenses(final Lang lang) throws SQLException{
 		assert lang != null : "lang is null";
 
 		return this.parent.findSenses(this, lang);
@@ -93,21 +94,22 @@ public abstract class Synset {
 	 * このSynsetから出ているリンク集合を取得する．
 	 *
 	 * @return このSynsetから出ているリンク集合
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Synlink> getSynlinks(){
+	public List<Synlink> getSynlinks() throws SQLException{
 
 		return this.parent.findSynlinks(this);
 
 	}
 
-	public List<Synlink> getSynlinks(final Link link){
+	public List<Synlink> getSynlinks(final Link link) throws SQLException{
 		assert link != null : "link is null";
 
 		return this.parent.findSynlinks(this, link);
 
 	}
 
-	public List<Synset> getConnectedSynsets(final Link link){
+	public List<Synset> getConnectedSynsets(final Link link) throws SQLException{
 		assert link != null : "link is null";
 
 		return this.parent.findSynsets(this, link);

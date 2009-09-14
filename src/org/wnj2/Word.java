@@ -18,6 +18,7 @@
 
 package org.wnj2;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -106,8 +107,9 @@ public abstract class Word {
 	 * Sense集合を取得する．
 	 *
 	 * @return このWordに関係するSenseのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Sense> getSenses(){
+	public List<Sense> getSenses() throws SQLException{
 
 		return this.parent.findSenses(this);
 
@@ -117,8 +119,9 @@ public abstract class Word {
 	 * Synset集合を取得する．
 	 *
 	 * @return このWordに関係するSynsetのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Synset> getSynsets(){
+	public List<Synset> getSynsets() throws SQLException{
 
 		return this.parent.findSynsets(this.getLemma(), this.getPos());
 

@@ -18,6 +18,8 @@
 
 package org.wnj2;
 
+import java.sql.SQLException;
+
 class LazyWord extends Word{
 
 	private Word impl = null;
@@ -80,12 +82,48 @@ class LazyWord extends Word{
 
 		if(this.impl == null){
 
-			this.impl = this.parent.findWord(this);
+			try {
+
+				this.impl = this.parent.findWord(this);
+
+			}catch(final SQLException e){
+
+				this.impl = new DummyWord(this.parent, -1);
+
+			}
 
 		}
 
 		return this.impl;
 
 	}
+
+	private class DummyWord extends Word{
+
+		protected DummyWord(Wnj2 parent, int wordid) {
+			super(parent, wordid);
+		}
+
+		@Override
+		public Lang getLang() {
+			return null;
+		}
+
+		@Override
+		public String getLemma() {
+			return "";
+		}
+
+		@Override
+		public Pos getPos() {
+			return null;
+		}
+
+		@Override
+		public String getPron() {
+			return "";
+		}
+
+	};
 
 }

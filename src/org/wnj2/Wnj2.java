@@ -120,9 +120,10 @@ public class Wnj2 implements Closeable{
 	 * @param file 日本語WordNetデータベースファイル
 	 *
 	 * @throws ClassNotFoundException SQLite用JDBSドライバの読み込みに失敗した場合
-	 * @throws IOException 日本語WordNetデータベースファイルに関する入出力エラーが発生した場合
+	 * @throws SQLException 日本語WordNetデータベースファイルに関する入出力エラーが発生した場合
+	 * @throws FileNotFoundException 指定されたファイルが見つからない場合
 	 */
-	public Wnj2(final File file) throws ClassNotFoundException, IOException{
+	public Wnj2(final File file) throws ClassNotFoundException, SQLException, FileNotFoundException{
 		assert file != null : "file is null";
 
 		if(!file.exists()){
@@ -132,15 +133,7 @@ public class Wnj2 implements Closeable{
 		}
 
 		Class.forName("org.sqlite.JDBC");
-		try{
-
-			this.connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.getAbsolutePath()));
-
-		}catch(final SQLException e){
-
-			throw new IOException(String.format("%sに関する入出力エラー", file));
-
-		}
+		this.connection = DriverManager.getConnection(String.format("jdbc:sqlite:%s", file.getAbsolutePath()));
 
 	}
 
@@ -185,8 +178,9 @@ public class Wnj2 implements Closeable{
 	 *
 	 * @param lemma 見出し語
 	 * @return 見出し語lemmaに一致するWordのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Word> findWords(final String lemma){
+	public List<Word> findWords(final String lemma) throws SQLException{
 		assert lemma != null : "lemma is null";
 
 		PreparedStatement ps = this.findWordsByLemma.get();
@@ -198,16 +192,8 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Word> ret = new ArrayList<Word>();
-		try {
-
-			ps.setString(1, lemma.toLowerCase());
-			ret.addAll(this.createWords(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setString(1, lemma.toLowerCase());
+		ret.addAll(this.createWords(ps));
 
 		return ret;
 
@@ -219,8 +205,9 @@ public class Wnj2 implements Closeable{
 	 * @param lemma 見出し語
 	 * @param pos 品詞
 	 * @return 見出し語lemmaと品詞posに一致するWordのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Word> findWords(final String lemma, final Pos pos){
+	public List<Word> findWords(final String lemma, final Pos pos) throws SQLException{
 		assert lemma != null : "lemma is null";
 		assert pos != null : "pos is null";
 
@@ -233,17 +220,9 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Word> ret = new ArrayList<Word>();
-		try{
-
-			ps.setString(1, lemma.toLowerCase());
-			ps.setString(2, pos.toString());
-			ret.addAll(this.createWords(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setString(1, lemma.toLowerCase());
+		ps.setString(2, pos.toString());
+		ret.addAll(this.createWords(ps));
 
 		return ret;
 
@@ -255,8 +234,9 @@ public class Wnj2 implements Closeable{
 	 * @param lemma 見出し語
 	 * @param pos 品詞
 	 * @return 見出し語lemmaと品詞posに一致するSynsetのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
 	 */
-	public List<Synset> findSynsets(final String lemma, final Pos pos){
+	public List<Synset> findSynsets(final String lemma, final Pos pos) throws SQLException{
 		assert lemma != null : "lemma is null";
 		assert pos != null : "pos is null";
 
@@ -269,17 +249,9 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synset> ret = new ArrayList<Synset>();
-		try {
-
-			ps.setString(1, lemma);
-			ps.setString(2, pos.toString());
-			ret.addAll(this.createSynsets(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setString(1, lemma);
+		ps.setString(2, pos.toString());
+		ret.addAll(this.createSynsets(ps));
 
 		return ret;
 
@@ -289,7 +261,7 @@ public class Wnj2 implements Closeable{
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Package private methods
 	/////////////////////////////////////////////////////////////////////////////////////
-	Word findWord(final Word word){
+	Word findWord(final Word word) throws SQLException{
 
 		PreparedStatement ps = this.findWordByWordid.get();
 		if(ps == null){
@@ -300,16 +272,8 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Word> ret = new ArrayList<Word>();
-		try{
-
-			ps.setInt(1, word.getWordID());
-			ret.addAll(this.createWords(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setInt(1, word.getWordID());
+		ret.addAll(this.createWords(ps));
 
 		if(ret.size() == 0){
 
@@ -321,7 +285,7 @@ public class Wnj2 implements Closeable{
 
 	}
 
-	List<Sense> findSenses(final Word word){
+	List<Sense> findSenses(final Word word) throws SQLException{
 
 		PreparedStatement ps = this.findSensesByWordid.get();
 		if(ps == null){
@@ -332,22 +296,14 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Sense> ret = new ArrayList<Sense>();
-		try{
-
-			ps.setInt(1, word.getWordID());
-			ret.addAll(this.createSences(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setInt(1, word.getWordID());
+		ret.addAll(this.createSences(ps));
 
 		return ret;
 
 	}
 
-	List<Sense> findSenses(final Synset synset){
+	List<Sense> findSenses(final Synset synset) throws SQLException{
 
 		PreparedStatement ps = this.findSensesBySynset.get();
 		if(ps == null){
@@ -358,22 +314,14 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Sense> ret = new ArrayList<Sense>();
-		try{
-
-			ps.setString(1, synset.getSynsetID());
-			ret.addAll(this.createSences(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setString(1, synset.getSynsetID());
+		ret.addAll(this.createSences(ps));
 
 		return ret;
 
 	}
 
-	List<Sense> findSenses(final Synset synset, final Lang lang){
+	List<Sense> findSenses(final Synset synset, final Lang lang) throws SQLException{
 
 		PreparedStatement ps = this.findSensesBySynsetAndLang.get();
 		if(ps == null){
@@ -384,23 +332,15 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Sense> ret = new ArrayList<Sense>();
-		try{
-
-			ps.setString(1, synset.getSynsetID());
-			ps.setString(2, lang.toString());
-			ret.addAll(this.createSences(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		ps.setString(1, synset.getSynsetID());
+		ps.setString(2, lang.toString());
+		ret.addAll(this.createSences(ps));
 
 		return ret;
 
 	}
 
-	Synset findSynset(final Synset synset){
+	Synset findSynset(final Synset synset) throws SQLException{
 
 		PreparedStatement ps = this.findSynsetBySynset.get();
 		if(ps == null){
@@ -411,16 +351,9 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synset> ret = new ArrayList<Synset>();
-		try{
+		ps.setString(1, synset.getSynsetID());
+		ret.addAll(this.createSynsets(ps));
 
-			ps.setString(1, synset.getSynsetID());
-			ret.addAll(this.createSynsets(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
 
 		if(ret.size() == 0){
 
@@ -432,7 +365,7 @@ public class Wnj2 implements Closeable{
 
 	}
 
-	List<Synset> findSynsets(final Synset synset, final Link link){
+	List<Synset> findSynsets(final Synset synset, final Link link) throws SQLException{
 
 		PreparedStatement ps = this.findSynsetBySynsetAndLink.get();
 		if(ps == null){
@@ -443,23 +376,16 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synset> ret = new ArrayList<Synset>();
-		try{
+		ps.setString(1, synset.getSynsetID());
+		ret.addAll(this.createSynsets(ps));
 
-			ps.setString(1, synset.getSynsetID());
-			ret.addAll(this.createSynsets(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
 
 		return ret;
 
 	}
 
 
-	SynsetDef findSynsetDef(final Synset synset){
+	SynsetDef findSynsetDef(final Synset synset) throws SQLException{
 
 		PreparedStatement ps = this.findSynsetDefBySynset.get();
 		if(ps == null){
@@ -470,27 +396,19 @@ public class Wnj2 implements Closeable{
 		}
 
 		SynsetDef ret = null;
+		ps.setString(1, synset.getSynsetID());
+		final ResultSet rs = ps.executeQuery();
 		try{
 
-			ps.setString(1, synset.getSynsetID());
-			final ResultSet rs = ps.executeQuery();
-			try{
+			if(rs.next()){
 
-				if(rs.next()){
-
-					ret = new SynsetDef(this, synset, Lang.valueOf(rs.getString(2)), rs.getString(3), rs.getInt(4));
-
-				}
-
-			}finally{
-
-				rs.close();
+				ret = new SynsetDef(this, synset, Lang.valueOf(rs.getString(2)), rs.getString(3), rs.getInt(4));
 
 			}
 
-		}catch(final SQLException e){
+		}finally{
 
-			e.printStackTrace();
+			rs.close();
 
 		}
 
@@ -498,7 +416,7 @@ public class Wnj2 implements Closeable{
 
 	}
 
-	List<Synlink> findSynlinks(final Synset synset){
+	List<Synlink> findSynlinks(final Synset synset) throws SQLException{
 
 		PreparedStatement ps = this.findSynlinksBySynset.get();
 		if(ps == null){
@@ -509,21 +427,14 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synlink> ret = new ArrayList<Synlink>();
-		try{
+		ps.setString(1, synset.getSynsetID());
+		ret.addAll(this.createSynlinks(ps));
 
-			ps.setString(1, synset.getSynsetID());
-			ret.addAll(this.createSynlinks(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
 		return ret;
 
 	}
 
-	List<Synlink> findSynlinks(final Synset synset, final Link link){
+	List<Synlink> findSynlinks(final Synset synset, final Link link) throws SQLException{
 
 		PreparedStatement ps = this.findSynlinksBySynsetAndLink.get();
 		if(ps == null){
@@ -534,17 +445,10 @@ public class Wnj2 implements Closeable{
 		}
 
 		final List<Synlink> ret = new ArrayList<Synlink>();
-		try{
+		ps.setString(1, synset.getSynsetID());
+		ps.setString(2, link.toString());
+		ret.addAll(this.createSynlinks(ps));
 
-			ps.setString(1, synset.getSynsetID());
-			ps.setString(2, link.toString());
-			ret.addAll(this.createSynlinks(ps));
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
 		return ret;
 
 	}
@@ -644,18 +548,9 @@ public class Wnj2 implements Closeable{
 
 	}
 
-	private PreparedStatement createPreparedStatement(final String sql){
+	private PreparedStatement createPreparedStatement(final String sql) throws SQLException{
 
-		PreparedStatement ret = null;
-		try{
-
-			ret = this.connection.prepareStatement(sql);
-
-		}catch(final SQLException e){
-
-			e.printStackTrace();
-
-		}
+		final PreparedStatement ret = this.connection.prepareStatement(sql);
 
 		assert ret != null;
 		return ret;

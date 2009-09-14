@@ -65,10 +65,20 @@ public class SynsetDef {
 		return this.synset;
 	}
 
+	/**
+	 * 言語を取得する．
+	 *
+	 * @return このSynset定義の言語
+	 */
 	public Lang getLang() {
 		return this.lang;
 	}
 
+	/**
+	 * Synsetの定義を取得する．
+	 *
+	 * @return 定義
+	 */
 	public String getDef() {
 		return this.def;
 	}
