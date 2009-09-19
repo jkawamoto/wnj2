@@ -61,28 +61,64 @@ public abstract class Synset {
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * SynsetIDを取得する．
+	 *
+	 * @return このオブジェクトのSynsetID
+	 */
 	public String getSynsetID() {
 
 		return this.synsetid;
 
 	}
 
+	/**
+	 * このオブジェクトの品詞を取得する．
+	 * @return このオブジェクトの品詞
+	 */
 	public abstract Pos getPos();
+
+	/**
+	 * このオブジェクトの名前を取得する．
+	 *
+	 * @return このオブジェクトの名前
+	 */
 	public abstract String getName();
+
+
 	public abstract String getSrc();
 
+	/**
+	 * このオブジェクトの定義を取得する．
+	 *
+	 * @return このオブジェクトの定義を表すSynsetDefオブジェクト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
+	 */
 	public SynsetDef getDef() throws SQLException{
 
 		return this.parent.findSynsetDef(this);
 
 	}
 
+	/**
+	 * このオブジェクトと関連するSenseリストの取得．
+	 *
+	 * @return このオブジェクトと関連するSenseオブジェクトのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
+	 */
 	public List<Sense> getSenses() throws SQLException{
 
 		return this.parent.findSenses(this);
 
 	}
 
+	/**
+	 * 言語を指定して，このオブジェクトと関連するSenseリストを取得する．
+	 *
+	 * @param lang 取得するSenseの言語
+	 * @return このオブジェクトと関連するSenseオブジェクトのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
+	 */
 	public List<Sense> getSenses(final Lang lang) throws SQLException{
 		assert lang != null : "lang is null";
 
@@ -102,6 +138,13 @@ public abstract class Synset {
 
 	}
 
+	/**
+	 * リンクの種類を指定して，このSynsetから出ているリンク集合を取得する．
+	 *
+	 * @param link 取得するリンクの種類
+	 * @return このSynsetから出ているリンク集合
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
+	 */
 	public List<Synlink> getSynlinks(final Link link) throws SQLException{
 		assert link != null : "link is null";
 
@@ -109,6 +152,13 @@ public abstract class Synset {
 
 	}
 
+	/**
+	 * このオブジェクトと指定されたリンクで結ばれているSynset集合を取得する．
+	 *
+	 * @param link 取得するリンクの種類
+	 * @return 指定されたリンクで結ばれているSynsetのリスト
+	 * @throws SQLException データベースへのアクセスにエラーが発生した場合
+	 */
 	public List<Synset> getConnectedSynsets(final Link link) throws SQLException{
 		assert link != null : "link is null";
 
@@ -116,8 +166,12 @@ public abstract class Synset {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * このオブジェクトと指定されたオブジェクトを比較します．
+	 * このメソッドは，SynsetIDが等しい場合にtrueを返します．
+	 *
+	 * @param obj このオブジェクトと比較されるオブジェクト
+	 * @return 比較対象のオブジェクトとSynsetIDが等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -135,8 +189,11 @@ public abstract class Synset {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * このオブジェクトのハッシュ値を取得する．
+	 * ハッシュ値は，SynsetIDのみから計算されます．
+	 *
+	 * @return このオブジェクトのハッシュ値
 	 */
 	@Override
 	public int hashCode() {
@@ -145,8 +202,10 @@ public abstract class Synset {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * このオブジェクトのJSON表記を取得する．
+	 *
+	 * @return このオブジェクトをJSON形式で表した文字列．
 	 */
 	@Override
 	public String toString() {

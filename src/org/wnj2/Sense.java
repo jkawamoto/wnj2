@@ -73,14 +73,27 @@ public class Sense {
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * このオブジェクトと関連するSynsetを取得する．
+	 *
+	 * @return このオブジェクトと関連するSynset
+	 */
 	public Synset getSynset() {
 		return this.synset;
 	}
 
+	/**
+	 * このオブジェクトと関連するWordを取得する．
+	 * @return このオブジェクトと関連するWord
+	 */
 	public Word getWord(){
 		return this.word;
 	}
 
+	/**
+	 * このオブジェクトの言語を取得する．
+	 * @return 言語
+	 */
 	public String getLang() {
 		return this.lang;
 	}
@@ -101,8 +114,12 @@ public class Sense {
 		return this.src;
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * このオブジェクトと指定されたオブジェクトを比較します．
+	 * このメソッドは，getSynsetの値とgetWordの値が共に等しい場合にtrueを返します．
+	 *
+	 * @param obj このオブジェクトと比較されるオブジェクト
+	 * @return 比較対象のオブジェクトとgetSynsetの値とgetWordの値が共に等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
 	public boolean equals(final Object obj){
@@ -118,18 +135,26 @@ public class Sense {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * このオブジェクトのハッシュ値を取得する．
+	 * ハッシュ値は，以下の式で計算されます．
+	 * <blockquote><pre>
+	 * (this.getSynset().getSynsetID() + this.getWord().getWordID()).hashCode()
+	 * </pre></blockquote>
+	 *
+	 * @return このオブジェクトのハッシュ値
 	 */
 	@Override
 	public int hashCode(){
 
-		return this.getSynset().hashCode() * this.getWord().hashCode();
+		return (this.getSynset().getSynsetID() + this.getWord().getWordID()).hashCode();
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * このオブジェクトのJSON表記を取得する．
+	 *
+	 * @return このオブジェクトをJSON形式で表した文字列．
 	 */
 	@Override
 	public String toString() {

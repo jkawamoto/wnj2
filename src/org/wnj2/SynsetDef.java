@@ -61,6 +61,10 @@ public class SynsetDef {
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Public methods
 	/////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * このオブジェクトによって定義されるSynsetの取得．
+	 * @return このオブジェクトによって定義されるSynset
+	 */
 	public Synset getSynset() {
 		return this.synset;
 	}
@@ -87,8 +91,12 @@ public class SynsetDef {
 		return this.sid;
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * このオブジェクトと指定されたオブジェクトを比較します．
+	 * このメソッドは，このオブジェクトによって定義されるSynsetが等しい場合にtrueを返します．
+	 *
+	 * @param obj このオブジェクトと比較されるオブジェクト
+	 * @return 比較対象のオブジェクトとgetSynsetが等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -103,8 +111,11 @@ public class SynsetDef {
 		return super.equals(obj);
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * このオブジェクトのハッシュ値を取得する．
+	 * ハッシュ値は，このオブジェクトによって定義されるSynsetのハッシュ値と同じです．
+	 *
+	 * @return このオブジェクトのハッシュ値
 	 */
 	@Override
 	public int hashCode() {
@@ -113,8 +124,10 @@ public class SynsetDef {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * このオブジェクトのJSON表記を取得する．
+	 *
+	 * @return このオブジェクトをJSON形式で表した文字列．
 	 */
 	@Override
 	public String toString() {
