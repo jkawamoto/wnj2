@@ -44,7 +44,7 @@ import java.util.List;
  * データファイルを指定して作成する場合，日本語WordNetウェブサイトで配布されているSQLite用データファイルをコンストラクタに指定します．
  * </p>
  * <blockquote><pre>
- * File file = new File("path_to_data_file");
+ * File file = new File("path_to_the_data_file");
  * Wnj2 wn = new Wnj2(file);
  * </pre></blockquote>
  * <p>
