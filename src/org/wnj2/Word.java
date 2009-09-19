@@ -162,7 +162,12 @@ public abstract class Word {
 	@Override
 	public String toString() {
 
-		return String.format("Word[ wordid: %d, lang: %s, lemma: %s, pron: %s, pos: %s]", this.getWordID(), this.getLang(), this.getLemma(), this.getPron(), this.getPos());
+		return String.format("{\"wordid\": %d, \"lang\": \"%s\", \"lemma\": \"%s\", \"pron\": \"%s\", \"pos\": \"%s\"}",
+				this.getWordID(),
+				this.getLang(),
+				this.getLemma().replace("\"", "\\\""),
+				this.getPron().replace("\"", "\\\""),
+				this.getPos());
 
 	}
 

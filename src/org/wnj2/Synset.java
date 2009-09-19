@@ -151,7 +151,11 @@ public abstract class Synset {
 	@Override
 	public String toString() {
 
-		return String.format("Synset[ synsetid: %s, pos: %s, name: %s, src: %s]", this.getSynsetID(), this.getPos(), this.getName(), this.getSrc());
+		return String.format("{\"synsetid\": \"%s\", \"pos\": \"%s\", \"name\": \"%s\", \"src\": \"%s\"}",
+				this.getSynsetID(),
+				this.getPos(),
+				this.getName().replace("\"", "\\\""),
+				this.getSrc().replace("\"", "\\\""));
 
 	}
 

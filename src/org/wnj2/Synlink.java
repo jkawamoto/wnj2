@@ -124,7 +124,11 @@ public class Synlink {
 	@Override
 	public String toString() {
 
-		return String.format("Synlink[ from: %s, to: %s, link: %s, src: %s]", this.getFrom().getSynsetID(), this.getTo().getSynsetID(), this.getLink(), this.getSrc());
+		return String.format("{\"from\": \"%s\", \"to\": \"%s\", \"link\": \"%s\", \"src\": \"%s\"}",
+				this.getFrom().getSynsetID(),
+				this.getTo().getSynsetID(),
+				this.getLink(),
+				this.getSrc().replace("\"", "\\\""));
 
 	}
 

@@ -119,7 +119,11 @@ public class SynsetDef {
 	@Override
 	public String toString() {
 
-		return String.format("SynsetDef[ synsetid: %s, lang: %s, def: %s, sid: %d]", this.getSynset(), this.getLang(), this.getDef(), this.getSID());
+		return String.format("{\"synsetid\": \"%s\", \"lang\": \"%s\", \"def\": \"%s\", \"sid\": %d}",
+				this.getSynset(),
+				this.getLang(),
+				this.getDef().replace("\"", "\\\""),
+				this.getSID());
 
 	}
 

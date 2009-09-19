@@ -134,8 +134,14 @@ public class Sense {
 	@Override
 	public String toString() {
 
-		return String.format("Sense[ synsetid: %s, wordid: %d, lang: %s, rank %d, lexid: %d, freq: %d, src: %s]",
-				this.getSynset().getSynsetID(), this.getWord().getWordID(), this.getLang(), this.getRank(), this.getLexID(), this.getFreq(), this.getSrc());
+		return String.format("{\"synsetid\": \"%s\", \"wordid\": %d, \"lang\": \"%s\", \"rank\": %d, \"lexid\": %d, \"freq\": %d, \"src\": \"%s\"}",
+				this.getSynset().getSynsetID(),
+				this.getWord().getWordID(),
+				this.getLang(),
+				this.getRank(),
+				this.getLexID(),
+				this.getFreq(),
+				this.getSrc().replace("\"", "\\\""));
 
 	}
 
