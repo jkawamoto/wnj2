@@ -127,8 +127,12 @@ public abstract class Word {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * このオブジェクトと指定されたオブジェクトを比較します．
+	 * このメソッドは，WordIDが等しい場合にtrueを返します．
+	 *
+	 * @param obj このオブジェクトと比較されるオブジェクト
+	 * @return 比較対象のオブジェクトとWordIDが等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
 	public boolean equals(final Object obj){
@@ -146,8 +150,11 @@ public abstract class Word {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * このオブジェクトのハッシュ値を取得する．
+	 * ハッシュ値は，WordIDのみから計算されます．
+	 *
+	 * @return このオブジェクトのハッシュ値
 	 */
 	@Override
 	public int hashCode() {
@@ -156,8 +163,10 @@ public abstract class Word {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * このオブジェクトのJSON表記を取得する．
+	 *
+	 * @return このオブジェクトをJSON形式で表した文字列．
 	 */
 	@Override
 	public String toString() {

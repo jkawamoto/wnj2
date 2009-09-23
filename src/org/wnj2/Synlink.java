@@ -83,6 +83,11 @@ public class Synlink {
 		return this.to;
 	}
 
+	/**
+	 * リンクの種類を取得する．
+	 *
+	 * @return リンクの種類
+	 */
 	public Link getLink() {
 		return this.link;
 	}
@@ -91,8 +96,12 @@ public class Synlink {
 		return this.src;
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * このオブジェクトと指定されたオブジェクトを比較します．
+	 * このメソッドは，getLink, getFrom, getToのすべてが等しい場合にtrueを返します．
+	 *
+	 * @param obj このオブジェクトと比較されるオブジェクト
+	 * @return 比較対象のオブジェクトとgetLink, getFrom, getToがすべて等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -108,18 +117,26 @@ public class Synlink {
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * このオブジェクトのハッシュ値を取得する．
+	 * ハッシュ値は，以下の式で計算されます．
+	 * <blockquote><pre>
+	 * (this.getLink().toString() + this.getFrom().toString() + this.getTo().toString()).hashCode()
+	 * </pre></blockquote>
+	 *
+	 * @return このオブジェクトのハッシュ値
 	 */
 	@Override
 	public int hashCode() {
 
-		return this.getLink().hashCode() * this.getFrom().hashCode() * this.getTo().hashCode();
+		return (this.getLink().toString() + this.getFrom().toString() + this.getTo().toString()).hashCode();
 
 	}
 
-	/* (非 Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * このオブジェクトのJSON表記を取得する．
+	 *
+	 * @return このオブジェクトをJSON形式で表した文字列．
 	 */
 	@Override
 	public String toString() {
