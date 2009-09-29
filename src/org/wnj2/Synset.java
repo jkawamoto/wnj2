@@ -174,18 +174,16 @@ public abstract class Synset {
 	 * @return 比較対象のオブジェクトとSynsetIDが等しい場合はtrue, そうでない場合はfalse
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 
-		try{
+		if(obj instanceof Synset){
 
 			final Synset that = (Synset)obj;
 			return this.getSynsetID().equals(that.getSynsetID());
 
-		}catch(final ClassCastException e){
-
-			return super.equals(obj);
-
 		}
+
+		return super.equals(obj);
 
 	}
 

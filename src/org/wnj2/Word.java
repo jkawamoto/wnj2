@@ -137,16 +137,14 @@ public abstract class Word {
 	@Override
 	public boolean equals(final Object obj){
 
-		try{
+		if(obj instanceof Word){
 
 			final Word that = (Word)obj;
 			return this.getWordID() == that.getWordID();
 
-		}catch(final ClassCastException e){
-
-			return false;
-
 		}
+
+		return super.equals(obj);
 
 	}
 
