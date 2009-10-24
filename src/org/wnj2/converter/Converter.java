@@ -18,6 +18,7 @@
 
 package org.wnj2.converter;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,11 +32,10 @@ public class Converter {
 	 */
 	public static void main(String[] args) {
 
-		String srcUri = "jdbc:sqlite:./data/wnjpn-0.9.db";
-		String destUri = "";
-		String destUser = "";
-		String destPass = "";
-
+		if(args.length < 3){
+			System.out.println("Useage: <Wordnet File's Path> <MySQL DB's URL> <Username of MySQL DB>");
+			System.exit(1);
+		}
 		try {
 
 			Class.forName("org.sqlite.JDBC");
@@ -48,12 +48,19 @@ public class Converter {
 
 		}
 
+		final String srcUri = String.format("jdbc:sqlite:%s", args[0]);
+		final String destUri = args[1];
+		final String destUser =args[2];
+
+		final Console console = System.console();
+		final String password = new String(console.readPassword("Password: "));
+
 		try {
 
 			final Connection srcCon = DriverManager.getConnection(srcUri);
 			final Statement srcStat = srcCon.createStatement();
 
-			final Connection destCon = DriverManager.getConnection(destUri, destUser, destPass);
+			final Connection destCon = DriverManager.getConnection(destUri, destUser, password);
 			final Statement destStat = destCon.createStatement();
 
 

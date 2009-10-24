@@ -8,13 +8,31 @@
 	<body>
 		<p>
 			<a href="http://nlpwww.nict.go.jp/wn-ja/index.ja.html">日本語WordNet</a>をJavaから利用するためのライブラリです．
-			プロジェクトの詳細及び使用方法については，<a href="http://sourceforge.jp/projects/wnj2/wiki/FrontPage">SourceFoege.JP内プロジェクトWiki</a>から参照できます．
+			プロジェクトの詳細及び使用方法は，SourceFoege.JP内の<a href="http://sourceforge.jp/projects/wnj2/">プロジェクトページ</a>を参照して下さい．
 		</p>
-		<h1>必須環境</h1>
+		<h2>必須環境</h2>
 		<ul>
 			<li>Java SE 6 以降</li>
 			<li><a href="http://nlpwww.nict.go.jp/wn-ja/jpn/downloads.html">日本語WordNetデータファイル</a></li>
-			<li>SQLiteJDBCドライバ(オプション)</li>
+			<li>SQLiteJDBCドライバ</li>
 		</ul>
+		<h2>サンプルコード</h2>
+		<blockquote><pre>// データファイルを指定してWnj2のインスタンスを作成します．
+Wnj2 wn = new Wnj2(new File("./wnjpn.db"));
+
+// Synsetを取得します．
+for(Synset s : wn.findSynsets("tree", Pos.n)){
+
+    // 下位語を取得して表示します
+    for(Synset h : s.getConnectedSynsets(Link.hypo)){
+
+        System.out.println(h);
+
+    }
+
+}
+
+wn.close();</pre></blockquote>
+
 	</body>
 </html>
