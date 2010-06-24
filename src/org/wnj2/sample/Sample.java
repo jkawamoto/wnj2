@@ -30,13 +30,13 @@ import org.wnj2.Wnj2;
 
 public class Sample {
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
 		try {
 
 			final Wnj2 wn = new Wnj2(new File("./db/wnjpn.db"));
 			// Synsetを取得します．
-			for(Synset s : wn.findSynsets("path", Pos.n)){
+			for(Synset s : wn.findSynsets(args[0], Pos.n)){
 
 			    // 下位語を取得して表示します
 			    for(Synset h : s.getConnectedSynsets(Link.hypo)){

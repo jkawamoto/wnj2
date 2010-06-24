@@ -16,7 +16,7 @@
  * along with Wnj2.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.wnj2.converter;
+package org.wnj2.importers;
 
 import java.io.Console;
 import java.sql.Connection;
@@ -25,7 +25,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Converter {
+/**
+ * 日本語 WordNet データベースを MySQL データベースへインポートします．
+ * このプログラムを利用するには， SQLite と MySQL 用の JDBC ドライバが必要になります．
+ *
+ * @author Junpei Kawamoto
+ *
+ */
+public class Import2MySQL {
 
 	/**
 	 * @param args
