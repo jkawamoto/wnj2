@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Japanese WordNet wrapper for Java</title>
+	</head>
+	<body>
+		<p>
+			<a href="http://nlpwww.nict.go.jp/wn-ja/index.ja.html">日本語WordNet</a>をJavaから利用するためのライブラリです．
+			プロジェクトの詳細及び使用方法は，SourceFoege.JP内の<a href="http://sourceforge.jp/projects/wnj2/">プロジェクトページ</a>を参照して下さい．
+		</p>
+		<h2>必須環境</h2>
+		<ul>
+			<li>Java SE 6 以降</li>
+			<li><a href="http://nlpwww.nict.go.jp/wn-ja/jpn/downloads.html">日本語WordNetデータファイル</a></li>
+			<li>SQLiteJDBCドライバ (オプショナル)</li>
+		</ul>
+		<h2>サンプルコード</h2>
+		<blockquote><pre>// データファイルを指定してWnj2のインスタンスを作成します．
+Wnj2 wn = new Wnj2(new File("./wnjpn.db"));
+
+// Synsetを取得します．
+for(Synset s : wn.findSynsets("tree", Pos.n)){
+
+    // 下位語を取得して表示します
+    for(Synset h : s.getConnectedSynsets(Link.hypo)){
+
+        System.out.println(h);
+
+    }
+
+}
+
+wn.close();</pre></blockquote>
+
+	</body>
+</html>
