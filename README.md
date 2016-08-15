@@ -30,4 +30,4 @@ Wnj2 wn = new Wnj2(con);
 ```
 
 # License
-This software is released under The GNU General Public License Version 3, see [COPYING](COPYING) for more detail.
+This software is released under The GNU Lesser General Public License Version 3, see [COPYING.LESSER](COPYING.LESSER) for more detail.
